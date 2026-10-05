@@ -1,40 +1,40 @@
-NO
-NO
-NO
+YES
+YES
+YES
 YES
 NO
-NO
+YES
 OK
-NO
+YES
 ERROR already closed
 OK
 NO
-NO
-NO
+YES
+YES
 NO
 OK
-NO
+YES
 ERROR not closed
 ERROR no track
 ERROR no track
 ERROR unknown station
 ERROR invalid command
-ERROR unknown station
-NO
-ERROR unknown station
-OK
-ERROR unknown station
-ERROR unknown station
-ERROR unknown station
-NO
 OK
 NO
-NO
-NO
+YES
+OK
+2
+ciro:1
+OK
+YES
 OK
 NO
+YES
+YES
+OK
+YES
 OK
 NO
-NO
+YES
 OK
 YES

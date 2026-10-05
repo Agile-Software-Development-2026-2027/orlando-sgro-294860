@@ -3,7 +3,7 @@ import sys
 
 STAZIONI = [
     "garibaldi",
-    "università",
+    "universita",
     "municipio",
     "toledo",
     "dante",
@@ -17,9 +17,9 @@ STAZIONI = [
 ]
 
 connessioni = {
-    "garibaldi": ["università"],
-    "università": ["garibaldi", "municipio"],
-    "municipio": ["università", "toledo"],
+    "garibaldi": ["universita"],
+    "universita": ["garibaldi", "municipio"],
+    "municipio": ["universita", "toledo"],
     "toledo": ["dante", "augusteo", "municipio"],
     "dante": ["museo", "toledo"],
     "museo": ["materdei", "dante"],
@@ -54,17 +54,15 @@ class GatesManager():
     def __can_go__(self, station1, station2) -> bool:
         if station1 not in STAZIONI or station2 not in STAZIONI:
             return False
-        if station2 not in self.connection_status[station1]:
-            return False
-        visited = set()
+        visited = {station1}
         stack = [station1]
         while stack:
             current = stack.pop()
             if current == station2:
                 return True
-            visited.add(current)
-            for neighbor in self.connection_status[current]:
+            for neighbor in self.connection_status.get(current, {}):
                 if self.connection_status[current][neighbor] and neighbor not in visited:
+                    visited.add(neighbor)
                     stack.append(neighbor)
         return False
 
@@ -138,6 +136,8 @@ class GatesManager():
     def reachable(self, station1, station2) -> str:
         if station1 not in STAZIONI or station2 not in STAZIONI:
             return "ERROR unknown station"
+        if station1 == station2:
+            return "YES"
         if self.__can_go__(station1, station2):
             return "YES"
         else:

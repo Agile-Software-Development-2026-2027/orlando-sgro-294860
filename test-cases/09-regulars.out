@@ -1,24 +1,24 @@
-regulars
+none
 OK
-regulars
+ciro:1
 2
 OK
 2
 OK
 2
-regulars
-regulars
+assunta:2 ciro:1 gennaro:1
+ciro:1 gennaro:1
 OK
 ERROR already in
 ERROR not in
-regulars
+assunta:2 ciro:2 gennaro:1
 2
-regulars
-regulars
+ciro:3 assunta:2 gennaro:1
+none
 OK
 OK
-regulars
-regulars
+ciro:3 assunta:2 bea:1 gennaro:1 zeno:1
+ERROR unknown station
 ERROR invalid command
 ERROR invalid command
 4

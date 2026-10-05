@@ -1,15 +1,15 @@
-regulars
+none
 OK
-regulars
+ciro:1
 2
-regulars
+ciro:2
 OK
 ERROR already in
-regulars
+ciro:3
 2
 ERROR not in
-regulars
-regulars
-regulars
-regulars
+ciro:3
+ciro:1
+none
+ERROR unknown station
 ERROR invalid command

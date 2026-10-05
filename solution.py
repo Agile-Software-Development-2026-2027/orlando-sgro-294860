@@ -32,6 +32,7 @@ class GatesManager():
     def __init__(self):
         self.inside = {}
         self.history = {}
+        self.station_history = {station: {} for station in STAZIONI}
 
     def enter(self, user, station) -> str:
         if station not in STAZIONI:
@@ -39,6 +40,9 @@ class GatesManager():
         if self.inside.get(user, False) == True:
             return "ERROR already in"
         self.inside[user] = True
+        if station not in self.station_history:
+            self.station_history[station] = {}
+        self.station_history[station][user] = self.station_history[station].get(user, 0) + 1
         return "OK"
 
     def exit(self, user, station) -> str:
@@ -50,6 +54,9 @@ class GatesManager():
         if user not in self.history:
             self.history[user] = 0
         self.history[user] += 1
+        if station not in self.station_history:
+            self.station_history[station] = {}
+        self.station_history[station][user] = self.station_history[station].get(user, 0) + 1
         return calculate_fare(self.history.get(user, 0))
 
     def pending(self) -> str:
@@ -63,6 +70,16 @@ class GatesManager():
     def fare(self, user) -> str:
         return calculate_total_fare(self.history.get(user, 0))
 
+    def regulars(self, station) -> str:
+        if station not in STAZIONI:
+            return "ERROR unknown station"
+        regulars = self.station_history.get(station, {})
+        if len(regulars) == 0:
+            return "none"
+        regulars = sorted(regulars.items(), key=lambda x: (-x[1], x[0]))
+        return " ".join(f"{user}:{count}" for user, count in regulars)
+        
+    
 if __name__ == "__main__":
     manager = GatesManager()
 
@@ -82,7 +99,7 @@ if __name__ == "__main__":
                     print(manager.fare(user))
 
                 case ["REGULARS", station]:
-                    print("regulars")
+                    print(manager.regulars(station))
     
                 case ["CLOSED", station1, station2]:
                     print("closed")

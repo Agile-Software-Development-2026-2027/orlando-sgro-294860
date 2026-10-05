@@ -35,7 +35,7 @@ class GatesManager():
 
     def enter(self, user, station) -> str:
         if station not in STAZIONI:
-            return print("ERROR unknown station")
+            return "ERROR unknown station"
         if self.inside.get(user, False) == True:
             return "ERROR already in"
         self.inside[user] = True
@@ -43,21 +43,25 @@ class GatesManager():
 
     def exit(self, user, station) -> str:
         if station not in STAZIONI:
-            return print("ERROR unknown station")
-        if user not in self.inside or not self.inside[user]:
+            return "ERROR unknown station"
+        if self.inside.get(user, False) == False:
             return "ERROR not in"
         self.inside[user] = False
+        if user not in self.history:
+            self.history[user] = 0
         self.history[user] += 1
-        return calculate_fare(self.history[user])
+        return calculate_fare(self.history.get(user, 0))
 
     def pending(self) -> str:
         inside = [user for user, inside in self.inside.items() if inside == True]
         if len(inside) == 0:
             return "none"
-        return "".join(inside)
+        inside.sort() # odio sortare alfabeticamente e per chiave simultaneamente, non è ottimale, amen
+        inside.sort(key=lambda x: self.history.get(x, 0))
+        return " ".join(inside)
 
     def fare(self, user) -> str:
-        return calculate_total_fare(self.history[user])
+        return calculate_total_fare(self.history.get(user, 0))
 
 if __name__ == "__main__":
     manager = GatesManager()
@@ -96,6 +100,6 @@ if __name__ == "__main__":
                     pass
 
                 case _:
-                    pass
+                    raise Exception()
         except Exception as e:
             print("ERROR invalid command")

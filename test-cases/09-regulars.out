@@ -1,18 +1,18 @@
 regulars
 OK
 regulars
-ERROR invalid command
+2
 OK
-ERROR invalid command
+2
 OK
-ERROR invalid command
+2
 regulars
 regulars
 OK
 ERROR already in
 ERROR not in
 regulars
-ERROR invalid command
+2
 regulars
 regulars
 OK
@@ -20,3 +20,5 @@ OK
 regulars
 regulars
 ERROR invalid command
+ERROR invalid command
+4

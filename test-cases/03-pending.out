@@ -2,18 +2,18 @@ none
 OK
 gennaro
 OK
-gennarociro
+ciro gennaro
 OK
-gennarociroassunta
+assunta ciro gennaro
 ERROR already in
-gennarociroassunta
-ERROR invalid command
-ciroassunta
+assunta ciro gennaro
+2
+assunta ciro
 ERROR not in
-ciroassunta
+assunta ciro
 OK
-gennarociroassunta
-ERROR invalid command
-ERROR invalid command
-ERROR invalid command
+assunta ciro gennaro
+2
+2
+2
 none

@@ -1,28 +1,28 @@
-ERROR invalid command
+0
 OK
-ERROR invalid command
-ERROR invalid command
-ERROR invalid command
+0
+2
+2
 ERROR not in
-ERROR invalid command
+2
 OK
-ERROR invalid command
-ERROR invalid command
+2
+4
 OK
-ERROR invalid command
-ERROR invalid command
-ERROR invalid command
+2
+2
+4
 OK
-ERROR invalid command
-ERROR invalid command
+2
+6
 OK
-ERROR invalid command
-ERROR invalid command
+1
+7
 OK
-ERROR invalid command
-ERROR invalid command
+1
+8
 OK
-ERROR invalid command
-ERROR invalid command
-ERROR invalid command
-ERROR invalid command
+0
+8
+2
+0

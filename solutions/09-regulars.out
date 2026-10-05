@@ -1,0 +1,24 @@
+none
+OK
+ciro:1
+2
+OK
+2
+OK
+2
+assunta:2 ciro:1 gennaro:1
+ciro:1 gennaro:1
+OK
+ERROR already in
+ERROR not in
+assunta:2 ciro:2 gennaro:1
+2
+ciro:3 assunta:2 gennaro:1
+none
+OK
+OK
+ciro:3 assunta:2 bea:1 gennaro:1 zeno:1
+ERROR unknown station
+ERROR invalid command
+ERROR invalid command
+4

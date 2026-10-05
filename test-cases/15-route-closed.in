@@ -1,0 +1,19 @@
+ROUTE garibaldi toledo
+ROUTE toledo vanvitelli
+ROUTE vanvitelli toledo
+ROUTE toledo museo
+ROUTE museo augusteo
+ROUTE materdei augusteo
+ROUTE dante fuga
+ROUTE toledo toledo
+ROUTE manzoni toledo
+ROUTE mergellina manzoni
+CLOSED augusteo fuga
+ROUTE toledo vanvitelli
+ROUTE garibaldi fuga
+ROUTE augusteo fuga
+CLOSED museo materdei
+ROUTE toledo vanvitelli
+REACHABLE toledo vanvitelli
+ROUTE posillipo toledo
+ROUTE toledo

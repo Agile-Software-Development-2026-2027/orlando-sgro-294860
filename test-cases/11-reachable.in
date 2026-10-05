@@ -1,0 +1,12 @@
+REACHABLE garibaldi garibaldi
+REACHABLE garibaldi universita
+REACHABLE garibaldi toledo
+REACHABLE toledo garibaldi
+REACHABLE garibaldi vanvitelli
+REACHABLE augusteo museo
+REACHABLE mergellina manzoni
+REACHABLE manzoni mergellina
+REACHABLE garibaldi mergellina
+REACHABLE manzoni fuga
+REACHABLE garibaldi posillipo
+REACHABLE garibaldi

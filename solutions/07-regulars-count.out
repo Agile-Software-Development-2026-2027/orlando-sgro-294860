@@ -1,0 +1,15 @@
+none
+OK
+ciro:1
+2
+ciro:2
+OK
+ERROR already in
+ciro:3
+2
+ERROR not in
+ciro:3
+ciro:1
+none
+ERROR unknown station
+ERROR invalid command

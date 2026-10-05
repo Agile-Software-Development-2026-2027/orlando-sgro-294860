@@ -1,0 +1,40 @@
+PENDING
+FARE ciro
+TAPIN ciro garibaldi
+TAPIN ciro toledo
+TAPOUT gennaro toledo
+PENDING
+TAPOUT ciro toledo
+TAPOUT ciro toledo
+TAPIN gennaro dante
+TAPIN assunta museo
+PENDING
+TAPIN ciro toledo
+TAPOUT ciro garibaldi
+TAPIN ciro garibaldi
+TAPOUT ciro municipio
+TAPIN ciro municipio
+TAPOUT ciro municipio
+FARE ciro
+TAPOUT gennaro fuga
+TAPIN ciro fuga
+TAPOUT ciro vanvitelli
+TAPIN ciro vanvitelli
+TAPOUT ciro fuga
+TAPIN ciro fuga
+
+TAPOUT ciro augusteo
+FARE ciro
+FARE gennaro
+FARE nobody
+PENDING
+TAPIN ciro posillipo
+TAPOUT assunta posillipo
+PENDING
+TAPIN ciro
+TAPIN ciro toledo now
+tapin ciro toledo
+FARE
+FARE ciro gennaro
+PENDING now
+TAPOUT assunta toledo extra

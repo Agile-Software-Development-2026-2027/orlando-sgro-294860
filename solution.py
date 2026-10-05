@@ -52,34 +52,26 @@ class GatesManager():
 
 
     def __can_go__(self, station1, station2) -> bool:
-        if station1 not in STAZIONI or station2 not in STAZIONI:
-            return False
-        visited = {station1}
-        stack = [station1]
-        while stack:
-            current = stack.pop()
-            if current == station2:
-                return True
-            for neighbor in self.connection_status.get(current, {}):
-                if self.connection_status[current][neighbor] and neighbor not in visited:
-                    visited.add(neighbor)
-                    stack.append(neighbor)
-        return False
+        return len(self.__can_go_shortest_path__(station1, station2)) > 0
 
     def __can_go_shortest_path__(self, station1, station2) -> list[str]:
         # Non avevo letto "shortest path", lo carico così se non riesco a completarlo amen
         if station1 not in STAZIONI or station2 not in STAZIONI:
             return []
         visited = {station1}
+        found_paths = []
         stack = [(station1, [station1])]
         while stack:
             current, path = stack.pop()
             if current == station2:
-                return path
+                found_paths.append(path)
+                continue
             for neighbor in self.connection_status.get(current, {}):
                 if self.connection_status[current][neighbor] and neighbor not in visited:
                     visited.add(neighbor)
                     stack.append((neighbor, path + [neighbor]))
+        if found_paths:
+            return min(found_paths, key=lambda x: len(x))
         return []
     
     def enter(self, user, station) -> str:

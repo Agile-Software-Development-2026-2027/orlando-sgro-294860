@@ -1,40 +1,40 @@
-reachable
-reachable
-reachable
-reachable
-reachable
-reachable
-closed
-reachable
-closed
-closed
-reachable
-reachable
-reachable
-reachable
-open
-reachable
-open
-closed
-closed
-reachable
+NO
+NO
+NO
+YES
+NO
+NO
+OK
+NO
+ERROR already closed
+OK
+NO
+NO
+NO
+NO
+OK
+NO
+ERROR not closed
+ERROR no track
+ERROR no track
+ERROR unknown station
 ERROR invalid command
-closed
-reachable
-reachable
+ERROR unknown station
+NO
+ERROR unknown station
 OK
 ERROR unknown station
 ERROR unknown station
-open
-reachable
-closed
-reachable
-reachable
-reachable
-open
-reachable
-closed
-reachable
-reachable
-open
-reachable
+ERROR unknown station
+NO
+OK
+NO
+NO
+NO
+OK
+NO
+OK
+NO
+NO
+OK
+YES

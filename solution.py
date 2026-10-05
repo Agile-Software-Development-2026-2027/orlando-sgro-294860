@@ -50,7 +50,6 @@ class GatesManager():
         self.station_history = {station: {} for station in STAZIONI}
         self.connection_status = {station: {s: True for s in connessioni[station]} for station in connessioni}
 
-
     def __can_go__(self, station1, station2) -> bool:
         return len(self.__can_go_shortest_path__(station1, station2)) > 0
 
@@ -59,19 +58,15 @@ class GatesManager():
         if station1 not in STAZIONI or station2 not in STAZIONI:
             return []
         visited = {station1}
-        found_paths = []
         stack = [(station1, [station1])]
         while stack:
             current, path = stack.pop()
             if current == station2:
-                found_paths.append(path)
-                continue
+                return path
             for neighbor in self.connection_status.get(current, {}):
                 if self.connection_status[current][neighbor] and neighbor not in visited:
                     visited.add(neighbor)
                     stack.append((neighbor, path + [neighbor]))
-        if found_paths:
-            return min(found_paths, key=lambda x: len(x))
         return []
     
     def enter(self, user, station) -> str:

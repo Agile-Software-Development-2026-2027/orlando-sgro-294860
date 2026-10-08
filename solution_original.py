@@ -1,5 +1,5 @@
 import sys
-from collections import deque
+
 
 STAZIONI = [
     "garibaldi",
@@ -24,7 +24,7 @@ connessioni = {
     "dante": ["museo", "toledo"],
     "museo": ["materdei", "dante"],
     "materdei": ["museo", "vanvitelli"],
-    "vanvitelli": ["materdei", "fuga"],
+    "vanvitelli": ["museo", "fuga"],
     "augusteo": ["toledo", "fuga"],
     "fuga": ["vanvitelli", "augusteo"],
     "mergellina": ["manzoni"],
@@ -43,8 +43,7 @@ def calculate_total_fare(amount):
     return total
 
 class GatesManager():
-    # Why __something__? I'm an advocate of keeping privat stuff that should be private, only expose what is meant to be accessed from outside.
-    # I know the variables could receive __ but thy're ugly for stuff I need to use frequently
+
     def __init__(self):
         self.inside = {}
         self.history = {}
@@ -52,35 +51,23 @@ class GatesManager():
         self.connection_status = {station: {s: True for s in connessioni[station]} for station in connessioni}
 
     def __can_go__(self, station1, station2) -> bool:
-        return len(self.__can_go_shortest_path_dijkstra__(station1, station2)) > 0
-    
-    def __assign_cost_recursive__(self, station, cost: dict[str, int]):
-        open_connections = [neightbor for neightbor in connessioni[station] if self.connection_status[station][neightbor] == True]
-        for neighbor in open_connections:
-            if cost[neighbor] > cost[station] + 1:
-                cost[neighbor] = cost[station] + 1
-                self.__assign_cost_recursive__(neighbor, cost)
+        return len(self.__can_go_shortest_path__(station1, station2)) > 0
 
-    def __reconstruct_path__(self, station1, station2, cost: dict[str, int]) -> list[str]:
-        path = [station2]
-        current = station2
-        while current != station1:
-            for neighbor in connessioni[current]:
-                if self.connection_status[current][neighbor] and neighbor not in path and cost[neighbor] == cost[current] - 1:
-                    path.append(neighbor)
-                    current = neighbor
-                    break
-        return path[::-1]
-
-    def __can_go_shortest_path_dijkstra__(self, station1, station2) -> list[str]:
+    def __can_go_shortest_path__(self, station1, station2) -> list[str]:
+        # Non avevo letto "shortest path", lo carico così se non riesco a completarlo amen
         if station1 not in STAZIONI or station2 not in STAZIONI:
             return []
-        cost = {station: 9999 for station in STAZIONI}
-        cost[station1] = 0
-        self.__assign_cost_recursive__(station1, cost)
-        if cost[station2] == 9999:
-            return []
-        return self.__reconstruct_path__(station1, station2, cost) 
+        visited = {station1}
+        stack = [(station1, [station1])]
+        while stack:
+            current, path = stack.pop()
+            if current == station2:
+                return path
+            for neighbor in self.connection_status.get(current, {}):
+                if self.connection_status[current][neighbor] and neighbor not in visited:
+                    visited.add(neighbor)
+                    stack.append((neighbor, path + [neighbor]))
+        return []
     
     def enter(self, user, station) -> str:
         if station not in STAZIONI:
@@ -105,7 +92,7 @@ class GatesManager():
         if station not in self.station_history:
             self.station_history[station] = {}
         self.station_history[station][user] = self.station_history[station].get(user, 0) + 1
-        return str(calculate_fare(self.history.get(user, 0)))
+        return calculate_fare(self.history.get(user, 0))
 
     def pending(self) -> str:
         inside = [user for user, inside in self.inside.items() if inside == True]
@@ -116,7 +103,7 @@ class GatesManager():
         return " ".join(inside)
 
     def fare(self, user) -> str:
-        return str(calculate_total_fare(self.history.get(user, 0)))
+        return calculate_total_fare(self.history.get(user, 0))
 
     def regulars(self, station) -> str:
         if station not in STAZIONI:
@@ -164,7 +151,7 @@ class GatesManager():
             return "ERROR unknown station"
         if station1 == station2:
             return station1
-        path = self.__can_go_shortest_path_dijkstra__(station1, station2)
+        path = self.__can_go_shortest_path__(station1, station2)
         if path:
             return " ".join(path)
         else:

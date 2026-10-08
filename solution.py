@@ -118,8 +118,7 @@ class GatesManager():
         inside = [user for user, inside in self.inside.items() if inside == True]
         if len(inside) == 0:
             return "none"
-        inside.sort()  # odio sortare alfabeticamente e per chiave simultaneamente, non è ottimale, amen
-        inside.sort(key=lambda x: self.history.get(x, 0))
+        inside.sort(key=lambda x: (self.history.get(x, 0), x[0]))
         return " ".join(inside)
     
     def fare(self, user) -> str:
@@ -178,7 +177,7 @@ class GatesManager():
             return "UNREACHABLE"
 
 
-if __name__ == "__main__":
+def main():
     manager = GatesManager()
     
     while (line := sys.stdin.readline()) != "":
@@ -218,3 +217,7 @@ if __name__ == "__main__":
                     raise Exception()
         except Exception as e:
             print("ERROR invalid command")
+
+
+if __name__ == "__main__":
+    main()

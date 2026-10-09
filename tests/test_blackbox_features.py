@@ -4,22 +4,18 @@ import pytest
 
 import solution
 
-
 # -------- DATA PREPPING --------
+
 
 @pytest.fixture
 def run_cli(monkeypatch, capsys):
-    """Esegue direttamente solution.main() simulando stdin e catturando stdout."""
-    
     def _execute(commands: list[str]) -> list[str]:
         raw_input = "\n".join(commands) + "\n"
         monkeypatch.setattr("sys.stdin", io.StringIO(raw_input))
-        
         solution.main()
-        
         captured = capsys.readouterr()
         return [line for line in captured.out.strip().splitlines() if line]
-    
+
     return _execute
 
 
@@ -34,6 +30,7 @@ def base_traffic():
 
 
 # -------- INTERNAL(?) FUNCTIONS --------
+
 
 def test_single_command_flow(run_cli):
     cmds = [
@@ -57,7 +54,7 @@ def test_blackbox_with_preloaded_state(run_cli, base_traffic):
         "FARE alice",
     ]
     output = run_cli(test_commands)
-    
+
     assert output[-3:] == [
         "bob charlie",
         "alice:1 charlie:1",
@@ -82,11 +79,55 @@ def test_network_closures_and_queries(run_cli):
     ]
 
 
-@pytest.mark.parametrize("invalid_command", [
-    "SALTO_IL_TURNELLO alice",
-    "TAPIN",
-    "ROUTE toledo",
-    "INVALID_COMMAND_NAME 1 2 3",
-])
+@pytest.mark.parametrize(
+    "invalid_command",
+    [
+        "SALTO_IL_TURNELLO alice",
+        "TAPIN",
+        "ROUTE toledo",
+        "INVALID_COMMAND_NAME 1 2 3",
+    ],
+)
 def test_invalid_syntax_triggers_error(run_cli, invalid_command):
     assert run_cli([invalid_command]) == ["ERROR invalid command"]
+
+
+def test_blackbox_empty_lines_and_whitespace(run_cli):
+    cmds = [
+        "",
+        "   ",
+        "PENDING",
+        "",
+        "REGULARS garibaldi",
+        "   ",
+    ]
+    output = run_cli(cmds)
+    assert output == [
+        "none",
+        "none",
+    ]
+
+
+def test_blackbox_not_found_errors(run_cli):
+    cmds = [
+        "REGULARS stazione_fantasma",
+        "OPEN stazione_fantasma garibaldi",
+        "OPEN garibaldi toledo",
+        "REACHABLE garibaldi stazione_fantasma",
+        "ROUTE stazione_fantasma garibaldi",
+    ]
+    output = run_cli(cmds)
+    assert output == [
+        "ERROR unknown station",
+        "ERROR unknown station",
+        "ERROR no track",
+        "ERROR unknown station",
+        "ERROR unknown station",
+    ]
+
+
+def test_main_execution_entrypoint(monkeypatch):
+    import runpy  # THIS IS ABSOLUTELY SPECTACULAR, 100% HERE I COME
+
+    monkeypatch.setattr("sys.stdin", io.StringIO("PENDING\n"))
+    runpy.run_module("solution", run_name="__main__")

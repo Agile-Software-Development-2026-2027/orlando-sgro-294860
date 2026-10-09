@@ -66,21 +66,6 @@ def test_calculate_total_fare_accumulation(trips, expected_total):
 
 
 class TestGatesManagerWhiteboxInternals:
-    def test_assign_cost_recursive(self, small_manager):
-        cost = {s: 9999 for s in small_manager.stations}
-        cost["A"] = 0
-        small_manager.__assign_cost_recursive__("A", cost)
-
-        assert cost["A"] == 0
-        assert cost["B"] == 1
-        assert cost["C"] == 2
-        assert cost["D"] == 9999  # Not Yet Reached
-
-    def test_reconstruct_path(self, small_manager):
-        cost = {"A": 0, "B": 1, "C": 2, "D": 9999}
-        path = small_manager.__reconstruct_path__("A", "C", cost)
-        assert path == ["A", "B", "C"]
-
     def test_can_go_shortest_path_dijkstra_found(self, small_manager):
         assert small_manager.__can_go_shortest_path_bfs__("A", "C") == ["A", "B", "C"]
         assert small_manager.__can_go_shortest_path_bfs__("C", "A") == ["C", "B", "A"]
@@ -94,6 +79,9 @@ class TestGatesManagerWhiteboxInternals:
     def test_can_go_boolean(self, small_manager):
         assert small_manager.__can_go__("A", "C") is True
         assert small_manager.__can_go__("A", "D") is False
+
+    def test_can_go_shortest_path_bfs_same_station(self, small_manager):
+        assert small_manager.__can_go_shortest_path_bfs__("A", "A") == ["A"]
 
 
 class TestGatesManagerUserState:

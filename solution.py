@@ -1,6 +1,5 @@
 import sys
 from collections import deque
-from warnings import deprecated
 
 stazioni = [
     "garibaldi",
@@ -69,34 +68,6 @@ class GatesManager:
     def __can_go__(self, station1, station2) -> bool:
         return len(self.__can_go_shortest_path_bfs__(station1, station2)) > 0
 
-    def __assign_cost_recursive__(self, station, cost: dict[str, int]):
-        open_connections = [
-            neightbor
-            for neightbor in self.connections[station]
-            if self.connection_status[station][neightbor] == True
-        ]
-        for neighbor in open_connections:
-            if cost[neighbor] > cost[station] + 1:
-                cost[neighbor] = cost[station] + 1
-                self.__assign_cost_recursive__(neighbor, cost)
-
-    def __reconstruct_path__(
-        self, station1, station2, cost: dict[str, int]
-    ) -> list[str]:
-        path = [station2]
-        current = station2
-        while current != station1:
-            for neighbor in self.connections[current]:
-                if (
-                    self.connection_status[current][neighbor]
-                    and neighbor not in path
-                    and cost[neighbor] == cost[current] - 1
-                ):
-                    path.append(neighbor)
-                    current = neighbor
-                    break
-        return path[::-1]
-
     def __can_go_shortest_path_bfs__(self, station1, station2) -> list[str]:
         if station1 not in self.stations or station2 not in self.stations:
             return []
@@ -122,21 +93,6 @@ class GatesManager:
                     queue.append((neighbor, path + [neighbor]))
 
         return []
-
-    # I enjoy deprecating old code instead of deleting in some cases, I know I caould use git to get it back but still I like it
-    @deprecated(
-        "This method is deprecated. Use __can_go_shortest_path_bfs__ instead.",
-        category=DeprecationWarning,
-    )
-    def __can_go_shortest_path_dijkstra__(self, station1, station2) -> list[str]:
-        if station1 not in self.stations or station2 not in self.stations:
-            return []
-        cost = {station: 9999 for station in self.stations}
-        cost[station1] = 0
-        self.__assign_cost_recursive__(station1, cost)
-        if cost[station2] == 9999:
-            return []
-        return self.__reconstruct_path__(station1, station2, cost)
 
     def enter(self, user, station) -> str:
         if station not in self.stations:

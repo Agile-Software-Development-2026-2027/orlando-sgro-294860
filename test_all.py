@@ -3,9 +3,9 @@ import os
 import subprocess
 
 # Forgot to add, a note here
-# This is written like this because I'm on windows and pipe operators work like s**t so I needed a decent way to run them all
-# It could be easily be done with .sh or way less lines of python but this is pretty nice
-# I wante4d to add support for .kt but compiling kotlin is out of teh scope of this exercise and i don'te really want to do it outside of intellij
+# This is written like this because I'm on Windows and pipe operators work like s**t, so I needed a decent way to run them all
+# It could easily be done with .sh or way fewer lines of python but this is pretty nice
+# I wanted to add support for .kt but compiling kotlin is out of the scope of this exercise and I don't really want to do it outside intellij
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser(description="Run tests for the solution.")

@@ -1,13 +1,19 @@
 import pytest
 
-from solution import GatesManager, calculate_fare, calculate_total_fare
+from solution import (
+    GatesManager,
+    calculate_fare,
+    calculate_total_fare,
+    connessioni,
+    stazioni,
+)
 
 # Before going forward: these tests are, I hope it's clear, pretty sparse
-# I did multiple files because I wanted to show different types of tests BUT i normally do 1 file 1 test_file to keep stuff organized
-# Doing things this way made my brain smoke so I went with the easy route and spammed classes
-# I could have done it with 1 test class but whathever it's "more granular" this way
+# I did multiple files because I wanted to show different types of tests BUT I normally do 1 file 1 test_file to keep stuff organized
+# Doing things this way made my brain smoke, so I went with the easy route and spammed classes
+# I could have done it with 1 test class but whatever it's "more granular" this way
 # and yeah the """ comment """ in python is atrocious, I will not use it
-# Note: It might be good to split the tests into multiple function to be more even more granural but I dont like walls of function of 1/2 lines of code
+# Note: It might be good to split the tests into multiple function to be more even more granular, but I don't like walls of function of 1/2 lines of code
 
 # -------- DATA PREPPING --------
 
@@ -26,7 +32,7 @@ def small_manager():
 
 @pytest.fixture
 def default_manager():
-    return GatesManager()
+    return GatesManager(connessioni, stazioni)
 
 
 # -------- EXTENRAL FUNCTIONS --------

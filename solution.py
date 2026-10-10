@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring missing-module-docstring missing-class-docstring
+
 import sys
 from collections import deque
 
@@ -48,17 +50,20 @@ def calculate_total_fare(amount):
 
 
 class GatesManager:
-    # Why __something__? I'm an advocate of keeping privat stuff that should be private, only expose what is meant to be accessed from outside.
-    # I know the variables could receive __ but thy're ugly for stuff I need to use frequently
+    # Why __something__? I'm an advocate of keeping private stuff that should be private;
+    # I only expose what is meant to be accessed from outside.
+    # I know the variables could receive __name__ but they're ugly for stuff used frequently
     def __init__(
         self,
-        connections: dict[str, list[str]] = connessioni,
-        stations: list[str] = stazioni,
+        connections: dict[str, list[str]],
+        stations: list[str],
     ):
-        self.inside = {}
-        self.history = {}
-        self.stations = stations
-        self.station_history = {station: {} for station in stations}
+        self.inside: dict[str, bool] = {}
+        self.history: dict[str, int] = {}
+        self.stations: list[str] = stations
+        self.station_history: dict[str, dict[str, int]] = {
+            station: {} for station in stations
+        }
         self.connections = connections
         self.connection_status = {
             station: {s: True for s in connections[station]} for station in connections
@@ -76,7 +81,7 @@ class GatesManager:
 
         queue = deque(
             [(station1, [station1])]
-        )  # (current_node, path_to_current_node) taht is indeed a lot of parentheses
+        )  # (current_node, path_to_current_node) that is indeed a lot of parentheses
         visited = {station1}
 
         while queue:
@@ -97,7 +102,7 @@ class GatesManager:
     def enter(self, user, station) -> str:
         if station not in self.stations:
             return "ERROR unknown station"
-        if self.inside.get(user, False) == True:
+        if self.inside.get(user, False):
             return "ERROR already in"
         self.inside[user] = True
         if station not in self.station_history:
@@ -110,7 +115,7 @@ class GatesManager:
     def exit(self, user, station) -> str:
         if station not in self.stations:
             return "ERROR unknown station"
-        if self.inside.get(user, False) == False:
+        if not self.inside.get(user, False):
             return "ERROR not in"
         self.inside[user] = False
         if user not in self.history:
@@ -124,7 +129,7 @@ class GatesManager:
         return str(calculate_fare(self.history.get(user, 0)))
 
     def pending(self) -> str:
-        inside = [user for user, inside in self.inside.items() if inside == True]
+        inside = [user for user, inside in self.inside.items() if inside]
         if len(inside) == 0:
             return "none"
         inside.sort(key=lambda x: (self.history.get(x, 0), x[0]))
@@ -139,8 +144,8 @@ class GatesManager:
         regulars = self.station_history.get(station, {})
         if len(regulars) == 0:
             return "none"
-        regulars = sorted(regulars.items(), key=lambda x: (-x[1], x[0]))
-        return " ".join(f"{user}:{count}" for user, count in regulars)
+        sorted_regulars = sorted(regulars.items(), key=lambda x: (-x[1], x[0]))
+        return " ".join(f"{user}:{count}" for user, count in sorted_regulars)
 
     def closed(self, station1, station2) -> str:
         if station1 not in self.stations or station2 not in self.stations:
@@ -171,8 +176,7 @@ class GatesManager:
             return "YES"
         if self.__can_go__(station1, station2):
             return "YES"
-        else:
-            return "NO"
+        return "NO"
 
     def route(self, station1, station2) -> str:
         if station1 not in self.stations or station2 not in self.stations:
@@ -182,50 +186,46 @@ class GatesManager:
         path = self.__can_go_shortest_path_bfs__(station1, station2)
         if path:
             return " ".join(path)
-        else:
-            return "UNREACHABLE"
+        return "UNREACHABLE"
 
 
 def main():
-    manager = GatesManager()
+    manager = GatesManager(connessioni, stazioni)
 
     while (line := sys.stdin.readline()) != "":
-        try:
-            match line.strip().split():
-                case ["TAPIN", user, station]:
-                    print(manager.enter(user, station))
+        match line.strip().split():
+            case ["TAPIN", user, station]:
+                print(manager.enter(user, station))
 
-                case ["TAPOUT", user, station]:
-                    print(manager.exit(user, station))
+            case ["TAPOUT", user, station]:
+                print(manager.exit(user, station))
 
-                case ["PENDING"]:
-                    print(manager.pending())
+            case ["PENDING"]:
+                print(manager.pending())
 
-                case ["FARE", user]:
-                    print(manager.fare(user))
+            case ["FARE", user]:
+                print(manager.fare(user))
 
-                case ["REGULARS", station]:
-                    print(manager.regulars(station))
+            case ["REGULARS", station]:
+                print(manager.regulars(station))
 
-                case ["CLOSED", station1, station2]:
-                    print(manager.closed(station1, station2))
+            case ["CLOSED", station1, station2]:
+                print(manager.closed(station1, station2))
 
-                case ["OPEN", station1, station2]:
-                    print(manager.open(station1, station2))
+            case ["OPEN", station1, station2]:
+                print(manager.open(station1, station2))
 
-                case ["REACHABLE", station1, station2]:
-                    print(manager.reachable(station1, station2))
+            case ["REACHABLE", station1, station2]:
+                print(manager.reachable(station1, station2))
 
-                case ["ROUTE", station1, station2]:
-                    print(manager.route(station1, station2))
+            case ["ROUTE", station1, station2]:
+                print(manager.route(station1, station2))
 
-                case []:
-                    pass
+            case []:
+                pass
 
-                case _:
-                    raise Exception  # noqa
-        except Exception:  # noqa
-            print("ERROR invalid command")
+            case _:
+                print("ERROR invalid command")
 
 
 if __name__ == "__main__":

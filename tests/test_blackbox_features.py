@@ -1,4 +1,6 @@
+# pylint: disable=missing-function-docstring missing-module-docstring missing-class-docstring
 import io
+import runpy
 
 import pytest
 
@@ -127,7 +129,5 @@ def test_blackbox_not_found_errors(run_cli):
 
 
 def test_main_execution_entrypoint(monkeypatch):
-    import runpy  # THIS IS ABSOLUTELY SPECTACULAR, 100% HERE I COME
-
     monkeypatch.setattr("sys.stdin", io.StringIO("PENDING\n"))
     runpy.run_module("solution", run_name="__main__")

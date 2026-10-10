@@ -1,7 +1,9 @@
 # pylint: disable=missing-function-docstring missing-module-docstring missing-class-docstring
 
 import sys
-from collections import deque
+from collections.abc import Iterable
+
+from utils.weighted_directed_graph import WeightedDirectedGraph
 
 stazioni = [
     "garibaldi",
@@ -18,7 +20,7 @@ stazioni = [
     "manzoni",
 ]
 
-connessioni = {
+connessioni: dict[str, Iterable[str]] = {
     "garibaldi": ["universita"],
     "universita": ["garibaldi", "municipio"],
     "municipio": ["universita", "toledo"],
@@ -55,7 +57,7 @@ class GatesManager:
     # I know the variables could receive __name__ but they're ugly for stuff used frequently
     def __init__(
         self,
-        connections: dict[str, list[str]],
+        connections: dict[str, Iterable[str]],
         stations: list[str],
     ):
         self.inside: dict[str, bool] = {}
@@ -64,40 +66,16 @@ class GatesManager:
         self.station_history: dict[str, dict[str, int]] = {
             station: {} for station in stations
         }
-        self.connections = connections
-        self.connection_status = {
-            station: {s: True for s in connections[station]} for station in connections
-        }
+        self.graph: WeightedDirectedGraph = WeightedDirectedGraph.from_unweighted(
+            connections
+        )
 
     # Me from the future, making these methods private may not have been a good idea for
     def __can_go__(self, station1, station2) -> bool:
-        return len(self.__can_go_shortest_path_bfs__(station1, station2)) > 0
+        return self.graph.can_go(station1, station2)
 
     def __can_go_shortest_path_bfs__(self, station1, station2) -> list[str]:
-        if station1 not in self.stations or station2 not in self.stations:
-            return []
-        if station1 == station2:
-            return [station1]
-
-        queue = deque(
-            [(station1, [station1])]
-        )  # (current_node, path_to_current_node) that is indeed a lot of parentheses
-        visited = {station1}
-
-        while queue:
-            current_station, path = queue.popleft()
-
-            for neighbor in self.connections[current_station]:
-                if (
-                    self.connection_status[current_station][neighbor]
-                    and neighbor not in visited
-                ):
-                    if neighbor == station2:
-                        return path + [neighbor]
-                    visited.add(neighbor)
-                    queue.append((neighbor, path + [neighbor]))
-
-        return []
+        return self.graph.shortest_path(station1, station2)
 
     def enter(self, user, station) -> str:
         if station not in self.stations:
@@ -150,23 +128,21 @@ class GatesManager:
     def closed(self, station1, station2) -> str:
         if station1 not in self.stations or station2 not in self.stations:
             return "ERROR unknown station"
-        if station2 not in self.connection_status[station1]:
+        if not self.graph.had_bidirectional_edge(station1, station2):
             return "ERROR no track"
-        if not self.connection_status[station1][station2]:
+        if not self.graph.get_bidirectional_edge_status(station1, station2):
             return "ERROR already closed"
-        self.connection_status[station1][station2] = False
-        self.connection_status[station2][station1] = False
+        self.graph.set_bidirectional_edge_status(station1, station2, False)
         return "OK"
 
     def open(self, station1, station2) -> str:
         if station1 not in self.stations or station2 not in self.stations:
             return "ERROR unknown station"
-        if station2 not in self.connection_status[station1]:
+        if not self.graph.had_bidirectional_edge(station1, station2):
             return "ERROR no track"
-        if self.connection_status[station1][station2]:
+        if self.graph.get_bidirectional_edge_status(station1, station2):
             return "ERROR not closed"
-        self.connection_status[station1][station2] = True
-        self.connection_status[station2][station1] = True
+        self.graph.set_bidirectional_edge_status(station1, station2, True)
         return "OK"
 
     def reachable(self, station1, station2) -> str:

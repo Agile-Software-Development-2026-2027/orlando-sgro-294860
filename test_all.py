@@ -1,11 +1,15 @@
+# pylint: disable=missing-function-docstring missing-module-docstring missing-class-docstring
+
 import argparse
 import os
 import subprocess
 
 # Forgot to add, a note here
-# This is written like this because I'm on Windows and pipe operators work like s**t, so I needed a decent way to run them all
+# This is written like this because I'm on Windows and pipe operators work like s**t,
+#   so I needed a decent way to run them all
 # It could easily be done with .sh or way fewer lines of python but this is pretty nice
-# I wanted to add support for .kt but compiling kotlin is out of the scope of this exercise and I don't really want to do it outside intellij
+# I wanted to add support for .kt but compiling kotlin is out of the scope of this exercise
+#   and I don't really want to do it outside intellij
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser(description="Run tests for the solution.")
@@ -24,8 +28,8 @@ if __name__ == "__main__":
             actual_output_file = f"./test-cases/{test_name}.out"
 
             with (
-                open(input_file, "r") as infile,
-                open(actual_output_file, "w") as outfile,
+                open(input_file, "r", encoding="utf-8") as infile,
+                open(actual_output_file, "w", encoding="utf-8") as outfile,
             ):
                 subprocess.run(
                     ["python", program_to_test.solution],
@@ -36,8 +40,8 @@ if __name__ == "__main__":
                 )
 
             with (
-                open(expected_output_file, "r") as expected_file,
-                open(actual_output_file, "r") as actual_file,
+                open(expected_output_file, "r", encoding="utf-8") as expected_file,
+                open(actual_output_file, "r", encoding="utf-8") as actual_file,
             ):
                 expected_output = expected_file.read().strip()
                 actual_output = actual_file.read().strip()
@@ -51,8 +55,11 @@ if __name__ == "__main__":
                         start=1,
                     ):
                         if expected_line != actual_line:
-                            with open(input_file, "r") as infile:
+                            with open(input_file, "r", encoding="utf-8") as infile:
                                 print(
-                                    f"Line {line_num}: {(infile.read().strip().split('\n')[-1])} \tExpected: {expected_line} \tActual: {actual_line}"
+                                    f"Line {line_num}: {(infile.read().strip().split('\n')[-1])}",
+                                    f"Expected: {expected_line}",
+                                    f"Actual: {actual_line}",
+                                    sep="\t",
                                 )
                                 break

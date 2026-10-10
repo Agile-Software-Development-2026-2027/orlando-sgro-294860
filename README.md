@@ -1,3 +1,11 @@
+# Notes on the result
+
+This became just testing ground, an excessive amount of perfectionism on linting/type checking/testing and much more is present ONYL at the scope of playing with different systems to see how they work, basically to build knowledge this is not meant to be a good example of how things should work.
+
+For example it is, in my opinion, pretty despicable to be runnign different linter / type checker just for the love of the game.
+
+It is also grottesquely overengineered for what it has to do.
+
 # Programming test
 
 After the robo-pizzeria, Ciro Musk wants to give Naples a metro that is as good as London's, where you pay with a card and only for what you ride.

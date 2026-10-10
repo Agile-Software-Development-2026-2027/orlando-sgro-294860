@@ -24,3 +24,7 @@ error-on-warning = true
 [tool.ty.rules]
 missing-type-argument = "error"
 possibly-unresolved-reference = "warn"
+
+[tool.pylint]
+ignore = [".venv", "venv", "check.py", "lint.py"]
+disable = ["redefined-outer-name"]

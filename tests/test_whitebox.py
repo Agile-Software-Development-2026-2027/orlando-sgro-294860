@@ -1,3 +1,4 @@
+# pylint: disable=missing-function-docstring missing-module-docstring missing-class-docstring
 import pytest
 
 from solution import (
@@ -9,11 +10,13 @@ from solution import (
 )
 
 # Before going forward: these tests are, I hope it's clear, pretty sparse
-# I did multiple files because I wanted to show different types of tests BUT I normally do 1 file 1 test_file to keep stuff organized
+# I did multiple files because I wanted to show different types of tests
+#   I normally do 1 file 1 test_file to keep stuff organized
 # Doing things this way made my brain smoke, so I went with the easy route and spammed classes
 # I could have done it with 1 test class but whatever it's "more granular" this way
 # and yeah the """ comment """ in python is atrocious, I will not use it
-# Note: It might be good to split the tests into multiple function to be more even more granular, but I don't like walls of function of 1/2 lines of code
+# Note: It might be good to split the tests into multiple function to be more even more granular,
+#   but I don't like walls of function of 1/2 lines of code
 
 # -------- DATA PREPPING --------
 
@@ -151,14 +154,12 @@ class TestGatesManagerUserState:
 class TestGatesManagerTracksAndRoutes:
     def test_closed_and_open_toggle(self, small_manager):
         assert small_manager.closed("A", "B") == "OK"
-        assert small_manager.connection_status["A"]["B"] is False
-        assert small_manager.connection_status["B"]["A"] is False
+        assert small_manager.graph.get_bidirectional_edge_status("A", "B") is False
 
         assert small_manager.closed("A", "B") == "ERROR already closed"
 
         assert small_manager.open("A", "B") == "OK"
-        assert small_manager.connection_status["A"]["B"] is True
-        assert small_manager.connection_status["B"]["A"] is True
+        assert small_manager.graph.get_bidirectional_edge_status("A", "B") is True
         assert small_manager.open("A", "B") == "ERROR not closed"
 
     def test_closed_errors(self, small_manager):

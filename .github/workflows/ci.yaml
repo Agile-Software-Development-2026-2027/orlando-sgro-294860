@@ -38,7 +38,7 @@ jobs:
         run: uv run ruff format --check .
 
       - name: Run Pytest with Coverage HTML
-        run: uv run pytest --cov=solution --cov-report=html
+        run: uv run pytest --cov=solution --cov=utils --cov-report=html
 
       - name: Setup Pages
         if: github.ref == 'refs/heads/main'

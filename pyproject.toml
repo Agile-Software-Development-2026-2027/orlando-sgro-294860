@@ -28,3 +28,6 @@ possibly-unresolved-reference = "warn"
 [tool.pylint]
 ignore = [".venv", "venv", "check.py", "lint.py"]
 disable = ["redefined-outer-name"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=solution --cov=utils"

@@ -146,7 +146,7 @@ class WeightedDirectedGraph:
             return []
         return [neighbor for neighbor, (_, is_open) in neighbors.items() if is_open]
 
-    # --- Overload ---
+    # --- Operators ---
 
     def __getitem__(self, key: str | tuple[str, str]):
         if isinstance(key, tuple):
